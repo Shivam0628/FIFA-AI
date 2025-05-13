@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Football Agent</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 2em;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1f2937;
+    }
+    textarea, button {
+      width: 100%;
+      padding: 1em;
+      margin-top: 1em;
+      border-radius: 0.5em;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    button {
+      background: #1f2937;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #374151;
+    }
+    #response {
+      margin-top: 2em;
+      background: white;
+      padding: 1em;
+      border-radius: 0.5em;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚽ Ask the Football AI Agent</h1>
+  <textarea id="prompt" placeholder="E.g. Tell me about Messi's career..." rows="4"></textarea>
+  <button onclick="sendPrompt()">Ask</button>
+  <div id="response"></div>
+
+  <script>
+    async function sendPrompt() {
+      const prompt = document.getElementById('prompt').value;
+      const responseDiv = document.getElementById('response');
+      responseDiv.innerText = 'Thinking...';
+
+      try {
+        const res = await fetch('https://sprabhakar0628.app.n8n.cloud/webhook/ai-agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await res.json();
+        responseDiv.innerText = data.result || data.response || JSON.stringify(data, null, 2);
+      } catch (err) {
+        console.error(err);
+        responseDiv.innerText = '⚠️ Error contacting AI agent.';
+      }
+    }
+  </script>
+</body>
+</html>
